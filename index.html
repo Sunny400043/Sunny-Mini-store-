@@ -148,28 +148,29 @@
             <div class="card">
                 <div style="font-size: 12px; color: #666; margin-bottom: 3px;">📍 Delivering to</div>
                 <div style="font-size: 14px; font-weight: bold;">Rohan <span style="background:#d4edda; color:#155724; padding:1px 5px; border-radius:4px; font-size:10px;">HOME</span></div>
-                <div style="font-size: 12px; color: #666; margin-top: 3px;">Plot no. 11, Ghansoli, Navi Mumbai 400701</div>
+                <div id="displayAddress" style="font-size: 12px; color: #666; margin-top: 3px;">Plot no. 11, Ghansoli, Navi Mumbai 400701</div>
+                <button class="btn" style="width:100%; margin-top:10px; padding:6px; font-size:12px;" onclick="changeAddress()">Change Address</button>
             </div>
 
             <div class="card">
                 <h3 style="margin: 0 0 10px 0; font-size: 14px;">🛍️ Quick Bulk Search</h3>
-                <input type="text" id="searchInput" placeholder="Search Atta, Milk, Oil, Eggs...">
+                <input type="text" id="searchInput" placeholder="Search Atta, Milk, Oil, Eggs..." onkeyup="filterProducts()">
                 
                 <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Popular Bulk Items:</div>
-                <div class="product-grid">
-                    <div class="product-item">
+                <div class="product-grid" id="productGrid">
+                    <div class="product-item" data-name="aashirvaad atta 5kg">
                         <h4>Aashirvaad Atta 5kg</h4>
                         <button onclick="addToCart('Aashirvaad Atta 5kg', 240)">Add to Cart</button>
                     </div>
-                    <div class="product-item">
+                    <div class="product-item" data-name="amul fresh milk 1l">
                         <h4>Amul Fresh Milk 1L</h4>
                         <button onclick="addToCart('Amul Fresh Milk 1L', 32)">Add to Cart</button>
                     </div>
-                    <div class="product-item">
+                    <div class="product-item" data-name="brown bread 400g">
                         <h4>Brown Bread 400g</h4>
                         <button onclick="addToCart('Brown Bread 400g', 45)">Add to Cart</button>
                     </div>
-                    <div class="product-item">
+                    <div class="product-item" data-name="farm fresh eggs 6pcs">
                         <h4>Farm Fresh Eggs 6pcs</h4>
                         <button onclick="addToCart('Farm Fresh Eggs 6pcs', 48)">Add to Cart</button>
                     </div>
@@ -230,6 +231,7 @@
         tg.expand();
 
         let cart = [];
+        let currentAddress = "Plot no. 11, Ghansoli, Navi Mumbai 400701";
 
         function switchTab(tabName, element) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -237,6 +239,29 @@
 
             document.getElementById('view-' + tabName).classList.add('active');
             element.classList.add('active');
+        }
+
+        function changeAddress() {
+            let newAddr = prompt("Enter new delivery address:", currentAddress);
+            if(newAddr && newAddr.trim() !== "") {
+                currentAddress = newAddr;
+                document.getElementById('displayAddress').innerText = currentAddress;
+                tg.HapticFeedback.notificationOccurred('success');
+                alert('Address updated successfully!');
+            }
+        }
+
+        function filterProducts() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.querySelectorAll('.product-item');
+            items.forEach(item => {
+                let name = item.getAttribute('data-name');
+                if(name.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
         function addToCart(name, price) {
@@ -284,10 +309,9 @@
                 action: "place_order",
                 phone: "+91 8815747971",
                 items: cart.map(i => i.name),
-                pincode: "400701"
+                address: currentAddress
             };
 
-            // Yeh data seedhe Telegram Bot ke paas bhej dega
             tg.sendData(JSON.stringify(orderData));
         }
     </script>
