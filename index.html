@@ -3,68 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flipkart Mini App</title>
-    <!-- Telegram Web App SDK -->
+    <title>Flipkart Minutes - Bulk Engine</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
+            background-color: #ffd800;
             font-family: Arial, sans-serif;
-            background-color: #f1f3f6;
             margin: 0;
             padding: 0;
-            text-align: center;
+            color: #333;
         }
         .header {
-            background-color: #2874f0;
-            color: white;
+            background: #fff;
             padding: 15px;
-            font-size: 20px;
+            text-align: center;
             font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 18px;
+            color: #2874f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         .container {
-            padding: 20px;
+            padding: 15px;
         }
         .card {
-            background: white;
+            background: #fff;
+            border-radius: 10px;
             padding: 15px;
-            margin: 10px 0;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .account-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
         .btn {
-            background-color: #ff9f00;
+            background: #2874f0;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 4px;
+            padding: 8px 15px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: #2874f0;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        🛒 Flipkart Mini Store
+        <div class="logo">🛒 Flipkart <span>★ BULK ENGINE</span></div>
     </div>
 
     <div class="container">
+        <!-- Account Section -->
+        <div class="account-box">
+            <div>
+                <span style="font-size: 14px; color: #666;">Current account</span><br>
+                <strong>+91 8815747971</strong>
+            </div>
+            <button class="btn" onclick="alert('Switch Account clicked')">Switch</button>
+        </div>
+
+        <!-- Shop Section -->
         <div class="card">
-            <h3>सुपर डील्स और ऑफर्स</h3>
-            <p>यहाँ से सीधे फ्लिपकार्ट के प्रोडक्ट्स देखें।</p>
-            <a href="https://www.flipkart.com" target="_blank" class="btn">Flipkart पर जाएं</a>
+            <h3>📍 Delivering to</h3>
+            <p><strong>Rohan</strong> <span style="background:#d4edda; color:#155724; padding:2px 6px; border-radius:4px; font-size:12px;">HOME</span></p>
+            <p style="font-size: 13px; color: #666;">Plot no. 11, Shop no. 16 k samne, Fashion Street, Ghansoli - Navi Mumbai Maharashtra 400701</p>
+            <button class="btn" style="width:100%; margin-top:10px;" onclick="alert('Address changed!')">Change Address</button>
+        </div>
+
+        <div class="card">
+            <h3>🛍️ Quick Shop</h3>
+            <input type="text" placeholder="Search Flipkart products..." style="width:100%; padding:10px; box-sizing:border-box; border:1px solid #ccc; border-radius:5px; margin-bottom:10px;">
+            <div style="display: flex; gap: 8px;">
+                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Atta</span>
+                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Milk</span>
+                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Bread</span>
+                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Eggs</span>
+            </div>
         </div>
     </div>
 
+    <!-- Bottom Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-item active">🏠<br>Shop</div>
+        <div class="nav-item">🛒<br>Cart</div>
+        <div class="nav-item">📦<br>Orders</div>
+        <div class="nav-item" onclick="alert('Account Settings opened')">👤<br>Account</div>
+    </div>
+
     <script>
-        // Telegram WebApp को फुल स्क्रीन मोड में सेट करें
+        // Telegram WebApp ko initialize karna
         let tg = window.Telegram.WebApp;
         tg.expand();
     </script>
-
 </body>
 </html>
