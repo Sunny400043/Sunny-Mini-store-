@@ -11,22 +11,29 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            padding-bottom: 70px;
             color: #333;
         }
         .header {
             background: #fff;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .logo {
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
             color: #2874f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+        }
+        .account-badge {
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #ddd;
         }
         .container {
             padding: 15px;
@@ -37,15 +44,6 @@
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .account-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8f9fa;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
         }
         .btn {
             background: #2874f0;
@@ -66,6 +64,7 @@
             justify-content: space-around;
             padding: 10px 0;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
         .nav-item {
             text-align: center;
@@ -77,56 +76,118 @@
             color: #2874f0;
             font-weight: bold;
         }
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .chip-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .chip {
+            background: #eee;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="logo">🛒 Flipkart <span>★ BULK ENGINE</span></div>
+        <div class="logo">🛒 Flipkart <span style="font-size:12px; color:#333;">★ BULK ENGINE</span></div>
+        <div class="account-badge">+91 8815747971</div>
     </div>
 
     <div class="container">
-        <!-- Account Section -->
-        <div class="account-box">
-            <div>
-                <span style="font-size: 14px; color: #666;">Current account</span><br>
-                <strong>+91 8815747971</strong>
+        <!-- SHOP VIEW -->
+        <div id="view-shop" class="view-section active">
+            <div class="card">
+                <h3>📍 Delivering to</h3>
+                <p><strong>Rohan</strong> <span style="background:#d4edda; color:#155724; padding:2px 6px; border-radius:4px; font-size:12px;">HOME</span></p>
+                <p style="font-size: 13px; color: #666;">P
+
+        
+                <button class="btn" style="width:100%; margin-top:10px;" onclick="alert('Address change option opened')">Change Address</button>
             </div>
-            <button class="btn" onclick="alert('Switch Account clicked')">Switch</button>
+
+            <div class="card">
+                <h3>🛍️ Quick Shop</h3>
+                <input type="text" placeholder="Search Flipkart products...">
+                <div class="chip-container">
+                    <span class="chip">Atta</span>
+                    <span class="chip">Milk</span>
+                    <span class="chip">Bread</span>
+                    <span class="chip">Eggs</span>
+                    <span class="chip">Onion</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <input type="text" placeholder="Or paste a product link to add">
+                <button class="btn" style="width:100%;">Add to Bulk Cart ➡</button>
+            </div>
         </div>
 
-        <!-- Shop Section -->
-        <div class="card">
-            <h3>📍 Delivering to</h3>
-            <p><strong>Rohan</strong> <span style="background:#d4edda; color:#155724; padding:2px 6px; border-radius:4px; font-size:12px;">HOME</span></p>
-            <p style="font-size: 13px; color: #666;">Plot no. 11, Shop no. 16 k samne, Fashion Street, Ghansoli - Navi Mumbai Maharashtra 400701</p>
-            <button class="btn" style="width:100%; margin-top:10px;" onclick="alert('Address changed!')">Change Address</button>
+        <!-- CART VIEW -->
+        <div id="view-cart" class="view-section">
+            <div class="card" style="text-align: center; padding: 30px;">
+                <h3>🛒 Your Cart is Empty</h3>
+                <p style="color: #666; font-size: 14px;">Add items from Shop tab to start bulk order.</p>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>🛍️ Quick Shop</h3>
-            <input type="text" placeholder="Search Flipkart products..." style="width:100%; padding:10px; box-sizing:border-box; border:1px solid #ccc; border-radius:5px; margin-bottom:10px;">
-            <div style="display: flex; gap: 8px;">
-                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Atta</span>
-                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Milk</span>
-                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Bread</span>
-                <span style="background:#eee; padding:5px 10px; border-radius:15px; font-size:12px;">Eggs</span>
+        <!-- ORDERS VIEW -->
+        <div id="view-orders" class="view-section">
+            <div class="card">
+                <h3>📦 Recent Orders</h3>
+                <p style="color: #666; font-size: 14px;">No active orders found in bulk engine.</p>
+            </div>
+        </div>
+
+        <!-- ACCOUNT VIEW -->
+        <div id="view-account" class="view-section">
+            <div class="card">
+                <h3>👤 Account Settings</h3>
+                <p><strong>Current account:</strong> +91 8815747971</p>
+                <button class="btn" style="background: #dc3545; width:100%; margin-top:10px;" onclick="alert('Logged out successfully')">Logout</button>
             </div>
         </div>
     </div>
 
     <!-- Bottom Navigation Bar -->
     <div class="nav-bar">
-        <div class="nav-item active">🏠<br>Shop</div>
-        <div class="nav-item">🛒<br>Cart</div>
-        <div class="nav-item">📦<br>Orders</div>
-        <div class="nav-item" onclick="alert('Account Settings opened')">👤<br>Account</div>
+        <div class="nav-item active" onclick="switchTab('shop', this)">🏠<br>Shop</div>
+        <div class="nav-item" onclick="switchTab('cart', this)">🛒<br>Cart</div>
+        <div class="nav-item" onclick="switchTab('orders', this)">📦<br>Orders</div>
+        <div class="nav-item" onclick="switchTab('account', this)">👤<br>Account</div>
     </div>
 
     <script>
-        // Telegram WebApp ko initialize karna
         let tg = window.Telegram.WebApp;
         tg.expand();
+
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('view-' + tabName).classList.add('active');
+            element.classList.add('active');
+        }
     </script>
 </body>
 </html>
