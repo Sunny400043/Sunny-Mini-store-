@@ -139,5 +139,190 @@
                     <div><h4>Surf Excel Detergent Powder</h4><div class="weight">1 kg</div></div>
                     <div class="price-row"><div class="price">₹135</div><div id="btn-container-4"><button class="add-btn" onclick="addToCart('Surf Excel Detergent Powder 1kg', 135, 4)">ADD</button></div></div>
                 </div>
-                <div
-                        
+                <div class="product-card" data-cat="snacks" data-name="Lays Magic Masala Chips">
+                    <div><h4>Lays Magic Masala Chips</h4><div class="weight">50g</div></div>
+                    <div class="price-row"><div class="price">₹20</div><div id="btn-container-5"><button class="add-btn" onclick="addToCart('Lays Magic Masala Chips', 20, 5)">ADD</button></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CART VIEW -->
+        <div id="view-cart" class="view-section">
+            <div style="background: #fff; padding: 14px; border-radius: 12px; border: 1px solid #eee;">
+                <h3 style="margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: 900;">🛒 Review Your Minutes Cart</h3>
+                <div id="cartListItems"><p style="font-size: 12px; color: #777; text-align: center; padding: 20px;">Cart is empty.</p></div>
+                <div id="cartCheckoutSec" style="display:none; margin-top: 15px;">
+                    <div style="display:flex; justify-content:space-between; font-weight:900; font-size: 13px; margin-bottom: 12px; background: #f8f9fa; padding: 10px; border-radius: 8px;">
+                        <span>Total Amount:</span> <span id="cartTotalPrice" style="color: var(--fk-green);">₹0</span>
+                    </div>
+                    <button style="width:100%; background: var(--fk-green); color:#fff; border:none; padding: 14px; border-radius: 10px; font-weight:900; font-size: 13px; cursor:pointer; box-shadow: 0 4px 12px rgba(36,150,63,0.3);" onclick="placeOrder()">🚀 Open in Flipkart Minutes App</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDERS VIEW -->
+        <div id="view-orders" class="view-section">
+            <div style="background: #fff; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #eee;">
+                <h3 style="font-size: 14px; margin-bottom: 5px; font-weight: 900;">📦 Active Live Orders</h3>
+                <p style="font-size: 11px; color: #666;">No live orders active right now.</p>
+            </div>
+        </div>
+
+        <!-- ACCOUNT VIEW -->
+        <div id="view-account" class="view-section">
+            <div style="background: #fff; padding: 14px; border-radius: 12px; border: 1px solid #eee;">
+                <h3 style="margin: 0 0 10px 0; font-size: 14px; font-weight: 900;">👤 Multi-Account Manager</h3>
+                <p style="font-size: 12px; margin-bottom: 10px;"><strong>Connected Phone:</strong> <span id="accPhoneText" style="color: var(--fk-green);">+91 8815747971</span></p>
+                <button style="width:100%; background: var(--fk-dark); color:#fff; border:none; padding: 12px; border-radius: 8px; font-weight:900; font-size: 12px; cursor:pointer;" onclick="switchAccountModal()">🔄 Switch Active Account</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-cart" id="floatingCartBar" onclick="switchTab('cart', document.querySelectorAll('.nav-item')[1])">
+        <div>
+            <div style="font-size: 11px; font-weight: bold; color: #aaa;" id="floatItemCount">0 items</div>
+            <div style="font-size: 14px; font-weight: 900;" id="floatTotalAmount">₹0</div>
+        </div>
+        <div style="font-size: 12px; font-weight: 900; color: var(--fk-yellow);">View Cart ➔</div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchTab('shop', this)"><span>🏠</span>Shop</div>
+        <div class="nav-item" onclick="switchTab('cart', this)"><span>🛒</span>Cart</div>
+        <div class="nav-item" onclick="switchTab('orders', this)"><span>📦</span>Orders</div>
+        <div class="nav-item" onclick="switchTab('account', this)"><span>👤</span>Account</div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        let cart = {};
+        let currentPhone = "+91 8815747971";
+        let currentAddress = "Plot no. 11, Ghansoli, Navi Mumbai 400701";
+
+        function switchTab(tab, el) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('view-' + tab).classList.add('active');
+            if(el) el.classList.add('active');
+        }
+
+        function filterCat(cat, el) {
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            let cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if(cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterProducts() {
+            let q = document.getElementById('searchInput').value.toLowerCase().trim();
+            let cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                let name = card.getAttribute('data-name').toLowerCase();
+                if(name.includes(q) || q === "") {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function addToCart(name, price, id) {
+            if(!cart[id]) {
+                cart[id] = { name, price, qty: 1 };
+            } else {
+                cart[id].qty += 1;
+            }
+            updateProductUI(id);
+            updateCartSummary();
+        }
+
+        function changeQty(id, delta) {
+            if(cart[id]) {
+                cart[id].qty += delta;
+                if(cart[id].qty <= 0) delete cart[id];
+            }
+            updateProductUI(id);
+            updateCartSummary();
+        }
+
+        function updateProductUI(id) {
+            let container = document.getElementById('btn-container-' + id);
+            if(!container) return;
+            if(cart[id] && cart[id].qty > 0) {
+                container.innerHTML = `<div class="counter-box"><button onclick="changeQty(${id}, -1)">-</button><span>${cart[id].qty}</span><button onclick="changeQty(${id}, 1)">+</button></div>`;
+            } else {
+                let card = container.closest('.product-card');
+                let name = card.getAttribute('data-name');
+                let priceText = card.querySelector('.price').innerText.replace('₹', '');
+                container.innerHTML = `<button class="add-btn" onclick="addToCart('${name}', ${parseInt(priceText)}, ${id})">ADD</button>`;
+            }
+        }
+
+        function updateCartSummary() {
+            let totalItems = 0, totalPrice = 0, html = '';
+            for(let id in cart) {
+                let item = cart[id];
+                totalItems += item.qty;
+                totalPrice += (item.price * item.qty);
+                html += `<div class="cart-item-row"><div><div style="font-weight:bold;">${item.name}</div><div style="color:#777; font-size:10px;">₹${item.price} x ${item.qty}</div></div><div style="font-weight:bold; color:var(--fk-green);">₹${item.price * item.qty}</div></div>`;
+            }
+
+            let cartListEl = document.getElementById('cartListItems');
+            let checkoutSec = document.getElementById('cartCheckoutSec');
+            let floatBar = document.getElementById('floatingCartBar');
+
+            if(totalItems === 0) {
+                cartListEl.innerHTML = '<p style="font-size: 12px; color: #777; text-align: center; padding: 20px;">Cart is empty.</p>';
+                checkoutSec.style.display = 'none';
+                floatBar.style.display = 'none';
+            } else {
+                cartListEl.innerHTML = html;
+                document.getElementById('cartTotalPrice').innerText = '₹' + totalPrice;
+                checkoutSec.style.display = 'block';
+                floatBar.style.display = 'flex';
+                document.getElementById('floatItemCount').innerText = totalItems + ' items';
+                document.getElementById('floatTotalAmount').innerText = '₹' + totalPrice;
+            }
+        }
+
+        function changeAddress() {
+            let addr = prompt("Enter new delivery address:", currentAddress);
+            if(addr) { currentAddress = addr; document.getElementById('currentAddrDisplay').innerText = addr; alert("Address updated!"); }
+        }
+
+        function switchAccountModal() {
+            let ph = prompt("Enter account phone number to switch:", currentPhone);
+            if(ph) { currentPhone = ph; document.getElementById('accPhoneText').innerText = ph; alert("Switched to " + ph); }
+        }
+
+        function placeOrder() {
+            let itemsArr = [];
+            let queryItems = [];
+            for(let id in cart) { 
+                itemsArr.push(`${cart[id].name} (x${cart[id].qty})`); 
+                queryItems.push(cart[id].name);
+            }
+
+            let data = { action: "place_order", phone: currentPhone, items: itemsArr, address: currentAddress };
+            if(tg && tg.sendData) { tg.sendData(JSON.stringify(data)); }
+
+            let encodedSearch = encodeURIComponent(queryItems[0] || "grocery");
+            let flipkartDeepLink = `[https://dl.flipkart.com/dl/search?q=$](https://dl.flipkart.com/dl/search?q=$){encodedSearch}&market=MINUTES`;
+
+            let confirmRedirect = confirm("Order summary sent to Telegram Bot! 🚀\n\nKya aap abhi isse Flipkart Minutes App par kholna chahte hain?");
+            if(confirmRedirect) {
+                window.location.href = flipkartDeepLink;
+            }
+        }
+    </script>
+</body>
+</html>
