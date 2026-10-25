@@ -11,7 +11,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            padding-bottom: 75px;
+            padding-bottom: 80px;
             color: #333;
         }
         .header {
@@ -101,6 +101,27 @@
             margin-bottom: 10px;
             font-size: 13px;
         }
+        .chip-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        .chip {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        .chip.active {
+            background: #2874f0;
+            color: white;
+            border-color: #2874f0;
+        }
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -117,22 +138,31 @@
         .product-item h4 {
             margin: 5px 0;
             font-size: 13px;
+            height: 35px;
+            overflow: hidden;
+        }
+        .product-item p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #388e3c;
+            font-weight: bold;
         }
         .product-item button {
             background: #2874f0;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
+            width: 100%;
             margin-top: 5px;
         }
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #eee;
             font-size: 13px;
         }
@@ -141,7 +171,7 @@
 <body>
 
     <div class="header">
-        <div class="logo">🛒 Flipkart <span style="font-size:11px; color:#333;">★ BULK ENGINE</span></div>
+        <div class="logo">🛒 Flipkart <span style="font-size:11px; color:#333;">★ MINUTES ENGINE</span></div>
         <div class="account-badge" id="headerPhone">+91 8815747971</div>
     </div>
 
@@ -149,53 +179,77 @@
         <!-- 1. SHOP VIEW -->
         <div id="view-shop" class="view-section active">
             <div class="card">
-                <div style="font-size: 12px; color: #666; margin-bottom: 3px;">📍 Delivering to</div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 3px;">📍 Live Delivering to</div>
                 <div style="font-size: 14px; font-weight: bold;">Rohan <span style="background:#d4edda; color:#155724; padding:1px 5px; border-radius:4px; font-size:10px;">HOME</span></div>
                 <div id="displayAddress" style="font-size: 12px; color: #666; margin-top: 3px;">Plot no. 11, Ghansoli, Navi Mumbai 400701</div>
                 <button class="btn" style="width:100%; margin-top:10px; padding:6px; font-size:12px;" onclick="changeAddress()">Change Address</button>
             </div>
 
             <div class="card">
-                <h3 style="margin: 0 0 10px 0; font-size: 14px;">🛍️ Quick Bulk Search</h3>
-                <input type="text" id="searchInput" placeholder="Search Atta, Milk, Oil, Eggs..." onkeyup="filterProducts()">
+                <h3 style="margin: 0 0 10px 0; font-size: 14px;">⚡ Lightning Fast Search</h3>
+                <input type="text" id="searchInput" placeholder="Search Atta, Milk, Bread, Eggs, Oil..." onkeyup="filterProducts()">
                 
-                <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Popular Bulk Items:</div>
+                <div class="chip-container">
+                    <div class="chip active" onclick="filterCategory('all', this)">All</div>
+                    <div class="chip" onclick="filterCategory('grocery', this)">Grocery & Atta</div>
+                    <div class="chip" onclick="filterCategory('dairy', this)">Dairy & Milk</div>
+                    <div class="chip" onclick="filterCategory('snacks', this)">Snacks & Drinks</div>
+                    <div class="chip" onclick="filterCategory('household', this)">Household</div>
+                </div>
+
                 <div class="product-grid" id="productGrid">
-                    <div class="product-item" data-name="aashirvaad atta 5kg">
+                    <div class="product-item" data-name="aashirvaad atta 5kg" data-category="grocery">
                         <h4>Aashirvaad Atta 5kg</h4>
+                        <p>₹240 (10 mins)</p>
                         <button onclick="addToCart('Aashirvaad Atta 5kg', 240)">Add to Cart</button>
                     </div>
-                    <div class="product-item" data-name="amul fresh milk 1l">
+                    <div class="product-item" data-name="amul fresh milk 1l" data-category="dairy">
                         <h4>Amul Fresh Milk 1L</h4>
+                        <p>₹32 (8 mins)</p>
                         <button onclick="addToCart('Amul Fresh Milk 1L', 32)">Add to Cart</button>
                     </div>
-                    <div class="product-item" data-name="brown bread 400g">
+                    <div class="product-item" data-name="brown bread 400g" data-category="grocery">
                         <h4>Brown Bread 400g</h4>
+                        <p>₹45 (10 mins)</p>
                         <button onclick="addToCart('Brown Bread 400g', 45)">Add to Cart</button>
                     </div>
-                    <div class="product-item" data-name="farm fresh eggs 6pcs">
+                    <div class="product-item" data-name="farm fresh eggs 6pcs" data-category="dairy">
                         <h4>Farm Fresh Eggs 6pcs</h4>
+                        <p>₹48 (12 mins)</p>
                         <button onclick="addToCart('Farm Fresh Eggs 6pcs', 48)">Add to Cart</button>
+                    </div>
+                    <div class="product-item" data-name="fortune sunlite oil 1l" data-category="grocery">
+                        <h4>Fortune Sunflower Oil 1L</h4>
+                        <p>₹135 (10 mins)</p>
+                        <button onclick="addToCart('Fortune Sunflower Oil 1L', 135)">Add to Cart</button>
+                    </div>
+                    <div class="product-item" data-name="lays chips 50g" data-category="snacks">
+                        <h4>Lays Classic Chips 50g</h4>
+                        <p>₹20 (6 mins)</p>
+                        <button onclick="addToCart('Lays Classic Chips 50g', 20)">Add to Cart</button>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h3 style="margin: 0 0 8px 0; font-size: 14px;">🔗 Custom Product Link</h3>
-                <input type="text" id="customLink" placeholder="Paste Flipkart product link here...">
-                <button class="btn" style="width:100%; padding:8px;" onclick="addCustomItem()">Add Custom Link to Cart</button>
+                <h3 style="margin: 0 0 8px 0; font-size: 14px;">🔗 Direct Link Order</h3>
+                <input type="text" id="customLink" placeholder="Paste Flipkart Minutes product link...">
+                <button class="btn" style="width:100%; padding:8px;" onclick="addCustomItem()">Add Custom Item to Cart</button>
             </div>
         </div>
 
         <!-- 2. CART VIEW -->
         <div id="view-cart" class="view-section">
             <div class="card">
-                <h3 style="margin: 0 0 10px 0; font-size: 14px;">🛒 Bulk Cart Items</h3>
+                <h3 style="margin: 0 0 10px 0; font-size: 14px;">🛒 Live Bulk Cart</h3>
                 <div id="cartItemsList">
                     <p style="color: #666; font-size: 13px; text-align: center;">Your cart is empty. Add items from Shop tab!</p>
                 </div>
                 <div id="cartCheckoutSection" style="display: none; margin-top: 15px;">
-                    <button class="btn btn-green" style="width:100%;" onclick="placeBulkOrder()">🚀 Place Bulk Order via Flipkart</button>
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between;">
+                        <span>Total Amount:</span> <span id="cartTotalPrice">₹0</span>
+                    </div>
+                    <button class="btn btn-green" style="width:100%; padding: 12px; font-size: 15px;" onclick="placeLiveOrder()">🚀 Place Live Order Now</button>
                 </div>
             </div>
         </div>
@@ -203,9 +257,9 @@
         <!-- 3. ORDERS VIEW -->
         <div id="view-orders" class="view-section">
             <div class="card">
-                <h3 style="margin: 0 0 8px 0; font-size: 14px;">📦 Order History</h3>
+                <h3 style="margin: 0 0 8px 0; font-size: 14px;">📦 Live Order Tracking</h3>
                 <div style="font-size: 13px; color: #666; padding: 10px 0; text-align: center;">
-                    No recent bulk orders found.
+                    No active live orders in progress.
                 </div>
             </div>
         </div>
@@ -215,7 +269,7 @@
             <div class="card">
                 <h3 style="margin: 0 0 8px 0; font-size: 14px;">👤 Account Settings</h3>
                 <p style="font-size: 13px;"><strong>Active Phone:</strong> <span id="displayPhone">+91 8815747971</span></p>
-                <p style="font-size: 13px;"><strong>Session Status:</strong> <span style="color:green;">Secure & Connected</span></p>
+                <p style="font-size: 13px;"><strong>Session Status:</strong> <span style="color:green;">Connected & Ready</span></p>
                 
                 <button class="btn btn-orange" style="width:100%; margin-top:10px;" onclick="switchNumber()">🔄 Switch Flipkart Number</button>
                 <button class="btn" style="background: #dc3545; width:100%; margin-top:8px;" onclick="logoutAccount()">Logout Account</button>
@@ -240,8 +294,6 @@
         let currentAddress = "Plot no. 11, Ghansoli, Navi Mumbai 400701";
         let currentPhone = "+91 8815747971";
 
-        console.log("Mini App opened and connected for " + currentPhone);
-
         function switchTab(tabName, element) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -256,27 +308,27 @@
                 currentAddress = newAddr;
                 document.getElementById('displayAddress').innerText = currentAddress;
                 tg.HapticFeedback.notificationOccurred('success');
-                alert('Address updated successfully!');
+                alert('Delivery address updated successfully!');
             }
         }
 
         function switchNumber() {
-            let newPhone = prompt("Enter new Flipkart mobile number (with +91):", currentPhone);
+            let newPhone = prompt("Enter active Flipkart mobile number (with +91):", currentPhone);
             if(newPhone && newPhone.trim() !== "") {
                 currentPhone = newPhone;
                 document.getElementById('displayPhone').innerText = currentPhone;
                 document.getElementById('headerPhone').innerText = currentPhone;
                 tg.HapticFeedback.notificationOccurred('success');
-                alert('Number switched to ' + currentPhone + '. Session connected!');
+                alert('Account switched to ' + currentPhone + '!');
             }
         }
 
         function logoutAccount() {
             if(confirm("Are you sure you want to logout?")) {
-                alert('Logged out successfully!');
-                currentPhone = "Not Logged In";
-                document.getElementById('displayPhone').innerText = currentPhone;
+                currentPhone = "Guest";
+                document.getElementById('displayPhone').innerText = "Not Logged In";
                 document.getElementById('headerPhone').innerText = "Guest";
+                alert('Logged out successfully.');
             }
         }
 
@@ -293,23 +345,38 @@
             });
         }
 
+        function filterCategory(category, element) {
+            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            let items = document.querySelectorAll('.product-item');
+            items.forEach(item => {
+                let cat = item.getAttribute('data-category');
+                if(category === 'all' || cat === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
         function addToCart(name, price) {
             cart.push({name: name, price: price});
             updateCartUI();
             tg.HapticFeedback.notificationOccurred('success');
-            alert(name + ' added to bulk cart!');
+            alert(name + ' added to cart!');
         }
 
         function addCustomItem() {
             let link = document.getElementById('customLink').value;
             if(link.trim() !== "") {
-                cart.push({name: "Custom Link Item", price: 0});
+                cart.push({name: "Custom Flipkart Item", price: 100});
                 document.getElementById('customLink').value = "";
                 updateCartUI();
                 tg.HapticFeedback.notificationOccurred('success');
-                alert('Custom product added to bulk cart!');
+                alert('Custom product added to cart!');
             } else {
-                alert('Please paste a valid link.');
+                alert('Please paste a valid product link.');
             }
         }
 
@@ -317,6 +384,7 @@
             let listDiv = document.getElementById('cartItemsList');
             let checkoutDiv = document.getElementById('cartCheckoutSection');
             let cartNav = document.getElementById('cartTabNav');
+            let totalPriceSpan = document.getElementById('cartTotalPrice');
 
             cartNav.innerHTML = `🛒<br>Cart (${cart.length})`;
 
@@ -325,15 +393,18 @@
                 checkoutDiv.style.display = 'none';
             } else {
                 let html = '';
+                let total = 0;
                 cart.forEach((item, index) => {
+                    total += item.price;
                     html += `<div class="cart-item"><span>${index + 1}. ${item.name}</span> <b>₹${item.price}</b></div>`;
                 });
                 listDiv.innerHTML = html;
+                totalPriceSpan.innerText = '₹' + total;
                 checkoutDiv.style.display = 'block';
             }
         }
 
-        function placeBulkOrder() {
+        function placeLiveOrder() {
             let orderData = {
                 action: "place_order",
                 phone: currentPhone,
@@ -341,9 +412,9 @@
                 address: currentAddress
             };
 
+            // Yeh data seedhe Telegram Bot par bhej dega live execution ke liye
             tg.sendData(JSON.stringify(orderData));
         }
     </script>
 </body>
-    </html>
-    
+</html>
